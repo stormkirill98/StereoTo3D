@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void openCam(int id);
 };
 
 #endif // MAINWINDOW_H
