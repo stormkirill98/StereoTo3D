@@ -1,14 +1,11 @@
+#include "camera.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 #include <iostream>
 #include<QDebug>
+#include <QThread>
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
-
-using namespace cv;
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -17,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    openCam(700);
+    //2 or 700
 }
 
 MainWindow::~MainWindow()
@@ -26,19 +23,20 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::openCam(int id) {
-    VideoCapture cap; // open the default camera
+    Camera* cam = new Camera(id);
+    QThread* thread = new QThread;
+    cam->moveToThread(thread);
 
-    if (!cap.open(id))
-        return;
+    connect(thread, SIGNAL(started()), cam, SLOT(start()));
+    connect(cam, SIGNAL(finished()), thread, SLOT(quit()));
+    //connect(this, SIGNAL(stopAll()), cam, SLOT(stop()));
+    connect(cam, SIGNAL(finished()), cam, SLOT(deleteLater()));
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
-    while(1) {
-        Mat frame;
-        cap >> frame; // get a new frame from camera
-        if( frame.empty())
-            break; // end of video stream
+    thread->start();
+}
 
-        imshow("Cam", frame);
-        if (waitKey(10) == 27)
-            break;
-    }
+void MainWindow::on_pushButton_clicked()
+{
+    openCam(2);
 }
