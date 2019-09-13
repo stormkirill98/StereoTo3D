@@ -42,6 +42,8 @@ LIBS += C:\OpenCV-4.0.1\opencv-build\bin\libopencv_imgcodecs401.dll
 LIBS += C:\OpenCV-4.0.1\opencv-build\bin\libopencv_imgproc401.dll
 LIBS += C:\OpenCV-4.0.1\opencv-build\bin\libopencv_features2d401.dll
 LIBS += C:\OpenCV-4.0.1\opencv-build\bin\libopencv_calib3d401.dll
+LIBS += C:\OpenCV-4.0.1\opencv-build\bin\libopencv_videoio401.dll
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

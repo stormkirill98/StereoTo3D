@@ -1,8 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <iostream>
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
+
+using namespace cv;
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,12 +16,26 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // read an image
-    cv::Mat image = cv::imread("E://left1.png", 1);
-    // create image window named "My Image"
-    cv::namedWindow("My Image");
-    // show the image on window
-    cv::imshow("My Image", image);
+    VideoCapture cap; // open the default camera
+
+//    int i = 2;
+//    while(!cap.open(i)) {
+//        i++;
+//    }
+
+    if(!cap.open(700))
+            return;
+
+    namedWindow("edges");
+    for(;;)
+    {
+        Mat frame;
+        cap >> frame; // get a new frame from camera
+        if( frame.empty()) break; // end of video stream
+
+        imshow("edges", frame);
+        if (waitKey(10) == 27) break;
+    }
 }
 
 MainWindow::~MainWindow()
