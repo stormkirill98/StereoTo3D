@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <QLabel>
 #include <QObject>
 
 #include <opencv2/core/core.hpp>
@@ -9,21 +10,22 @@
 using namespace cv;
 
 class Camera : public QObject {
-    Q_OBJECT
+  Q_OBJECT
 
-private:
-    VideoCapture cap;
-    bool isWork;
+ private:
+  VideoCapture cap;
+  QLabel* output;
+  bool isWork;
 
-public:
-    Camera(int id);
+ public:
+  Camera(int id, QLabel* output);
 
-public slots:
-    void start();
-    void stop();
+ public slots:
+  void start();
+  void stop();
 
-signals:
-    void finished();
+ signals:
+  void finished();
 
 
 };
