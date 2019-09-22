@@ -20,8 +20,13 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow* ui;
+  int cameraId1 = -1, cameraId2 = -1;
+
+ private:
   void openCam(int id, QLabel* output);
   QList<int> getCameraIds();
+  void takePhoto();
+  void defineCameraIds();
 };
 
 #endif // MAINWINDOW_H

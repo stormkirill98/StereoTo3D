@@ -26,8 +26,6 @@ class Camera : public QObject {
 
  signals:
   void finished();
-
-
 };
 
 #endif // CAMERA_H
