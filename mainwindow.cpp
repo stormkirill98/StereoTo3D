@@ -21,11 +21,10 @@ MainWindow::~MainWindow() {
   delete ui;
 }
 
-void MainWindow::enableButtons() {
-  qDebug() << "enableButtons";
+void MainWindow::enableMenuBar() {
+  qDebug() << "enableMenuBar";
 
-  ui->takePhotos->setEnabled(true);
-  ui->showCam->setEnabled(true);
+  ui->menuBar->setEnabled(true);
 }
 
 void MainWindow::endedCameraOutput() {
@@ -62,7 +61,7 @@ void MainWindow::defineCameraIds() {
 
   connect(thread, SIGNAL(started()), defCamIds, SLOT(defineCameraIds()));
   connect(defCamIds, SIGNAL(finished()), thread, SLOT(quit()));
-  connect(defCamIds, SIGNAL(finished()), this, SLOT(enableButtons()));
+  connect(defCamIds, SIGNAL(finished()), this, SLOT(enableMenuBar()));
   connect(defCamIds, SIGNAL(finished()), defCamIds, SLOT(deleteLater()));
   connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
@@ -71,6 +70,7 @@ void MainWindow::defineCameraIds() {
 
 void MainWindow::takePhoto(int cameraId, QLabel* label) {
   qDebug() << "Take photo from " << cameraId;
+  ui->statusBar->showMessage(QString("Take photo from %1").arg(cameraId));
 
   VideoCapture cap;
 
@@ -79,7 +79,8 @@ void MainWindow::takePhoto(int cameraId, QLabel* label) {
 
     cap >> frame;
     if (!frame.empty()) {
-      QImage image = IMGCONV::cvMatToQImage(frame).scaled(320, 240, Qt::KeepAspectRatio);
+      QImage image = IMGCONV::cvMatToQImage(frame);
+      label->setFixedSize(image.width(), image.height());
       label->setPixmap(QPixmap::fromImage(image));
     } else {
       label->setText("Frame from camera is empty");
@@ -91,17 +92,7 @@ void MainWindow::takePhoto(int cameraId, QLabel* label) {
   cap.release();
 }
 
-void MainWindow::on_takePhotos_clicked() {
-  qDebug() << "emit stopShowingCam";
-  emit stopShowingCam();
-
-  QThread::msleep(1000);
-
-  takePhoto(cameraId1, ui->image1);
-  takePhoto(cameraId2, ui->image2);
-}
-
-void MainWindow::on_showCam_clicked() {
+void MainWindow::on_actionShowCamera_triggered() {
   if (cameraId1 > 0) {
     showOutputCam(cameraId1);
   } else if (cameraId2 > 0) {
@@ -111,27 +102,12 @@ void MainWindow::on_showCam_clicked() {
   }
 }
 
-void MainWindow::on_test_clicked() {
-  VideoCapture cap1, cap2;
-  int id = 700;
+void MainWindow::on_actionTakePhotos_triggered() {
+  qDebug() << "emit stopShowingCam";
+  emit stopShowingCam();
 
-  if (cap1.open(id)) {
-    for (int i = 0; i < 100; i++) {
-      Mat frame;
+  QThread::msleep(1000);
 
-      cap1 >> frame;
-      imshow("Cap1", frame);
-    }
-  }
-
-  cap1.release();
-
-  if (cap2.open(id)) {
-    for (int i = 0; i < 100; i++) {
-      Mat frame;
-
-      cap2 >> frame;
-      imshow("Cap2", frame);
-    }
-  }
+  takePhoto(cameraId1, ui->image1);
+  takePhoto(cameraId2, ui->image2);
 }

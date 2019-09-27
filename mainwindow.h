@@ -17,15 +17,13 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
  public slots:
-  void enableButtons();
+  void enableMenuBar();
   void endedCameraOutput();
 
  private slots:
-  void on_takePhotos_clicked();
+  void on_actionShowCamera_triggered();
 
-  void on_showCam_clicked();
-
-  void on_test_clicked();
+  void on_actionTakePhotos_triggered();
 
  private:
   Ui::MainWindow* ui;
