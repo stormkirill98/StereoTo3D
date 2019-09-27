@@ -24,6 +24,8 @@ MainWindow::~MainWindow() {
 void MainWindow::enableMenuBar() {
   qDebug() << "enableMenuBar";
 
+  ui->statusBar->clearMessage();
+
   ui->menuBar->setEnabled(true);
 }
 
@@ -54,6 +56,7 @@ void MainWindow::showOutputCam(int id) {
 }
 
 void MainWindow::defineCameraIds() {
+  ui->statusBar->showMessage("Defining of camera id's");
   DefinitionCameraIds* defCamIds = new DefinitionCameraIds(&cameraId1, &cameraId2);
 
   QThread* thread = new QThread;
@@ -70,7 +73,6 @@ void MainWindow::defineCameraIds() {
 
 void MainWindow::takePhoto(int cameraId, QLabel* label) {
   qDebug() << "Take photo from " << cameraId;
-  ui->statusBar->showMessage(QString("Take photo from %1").arg(cameraId));
 
   VideoCapture cap;
 
