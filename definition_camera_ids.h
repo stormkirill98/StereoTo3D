@@ -21,7 +21,7 @@ class DefinitionCameraIds : public QObject {
 
  private:
   bool checkCameraId(int id);
-  int defineCameraId(int alreadyUsedId);
+  int defineCameraId(int alreadyUsedId, int i = 0);
 
  public slots:
   void defineCameraIds();

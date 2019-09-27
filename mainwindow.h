@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QMainWindow>
+#include "camera.h"
 
 namespace Ui {
 class MainWindow;
@@ -15,18 +16,29 @@ class MainWindow : public QMainWindow {
   explicit MainWindow(QWidget* parent = nullptr);
   ~MainWindow();
 
+ public slots:
+  void enableButtons();
+  void endedCameraOutput();
+
  private slots:
-  void on_pushButton_clicked();
+  void on_takePhotos_clicked();
+
+  void on_showCam_clicked();
+
+  void on_test_clicked();
 
  private:
   Ui::MainWindow* ui;
   int cameraId1 = -1, cameraId2 = -1;
+  Camera* cam = nullptr;
 
  private:
-  void openCam(int id, QLabel* output);
-  QList<int> getCameraIds();
-  void takePhoto();
+  void showOutputCam(int id);
+  void takePhoto(int cameraId, QLabel* label);
   void defineCameraIds();
+
+ signals:
+  void stopShowingCam();
 };
 
 #endif // MAINWINDOW_H

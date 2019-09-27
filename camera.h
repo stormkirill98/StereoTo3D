@@ -14,11 +14,10 @@ class Camera : public QObject {
 
  private:
   VideoCapture cap;
-  QLabel* output;
   bool isWork;
 
  public:
-  Camera(int id, QLabel* output);
+  Camera(int id);
 
  public slots:
   void start();

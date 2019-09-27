@@ -16,9 +16,20 @@ bool DefinitionCameraIds::checkCameraId(int id) {
   return cap.open(id);
 }
 
-int DefinitionCameraIds::defineCameraId(int alreadyUsedId) {
+int DefinitionCameraIds::defineCameraId(int alreadyUsedId, int i) {
+  //not found first camera
+  if (i == -1) {
+    return -1;
+  }
+
   VideoCapture cap;
-  int i = 0;
+
+  if (alreadyUsedId != 2 && cap.open(2)) {
+    return 2;
+  }
+  if (alreadyUsedId != 700 && cap.open(700)) {
+    return 700;
+  }
 
   while (i++ < NUMBER_SORTED_ID) {
     if (i != alreadyUsedId) {
@@ -38,7 +49,7 @@ void DefinitionCameraIds::defineCameraIds() {
   }
 
   if (!checkCameraId(*id2)) {
-    *id2 = defineCameraId(*id1);
+    *id2 = defineCameraId(*id1, *id1);
     qDebug() << "Define second camera id = " << *id2;
   }
 
