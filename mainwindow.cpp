@@ -25,7 +25,6 @@ void MainWindow::enableMenuBar() {
   qDebug() << "enableMenuBar";
 
   ui->statusBar->clearMessage();
-
   ui->menuBar->setEnabled(true);
 }
 
